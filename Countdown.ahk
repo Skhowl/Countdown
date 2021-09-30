@@ -13,11 +13,11 @@ Gui , Timer:Add , Button , gresume x80 y46 w85 h25 center , P/Resume
 
 Gui , Timer:Font , s11 cBlack , Trebuchet MS
 Gui , Timer:Add , Edit , x0 y71 w55 h25 center ve3
-Gui , Timer:Add , UpDown , x0 y71 w55 h25 -VScroll , 0
+Gui , Timer:Add , UpDown , x0 y71 w55 h25 -VScroll , 1
 Gui , Timer:Add , Edit , x55 y71 w55 h25 center ve2
-Gui , Timer:Add , UpDown , x55 y71 w55 h25 -VScroll , 0
+Gui , Timer:Add , UpDown , x55 y71 w55 h25 -VScroll , 50
 Gui , Timer:Add , Edit , x110 y71 w55 h25 center ve1
-Gui , Timer:Add , UpDown , x110 y71 w55 h25 -VScroll , 10
+Gui , Timer:Add , UpDown , x110 y71 w55 h25 -VScroll , 0
 
 Gui , Timer:Font , s10 cFFFAFA , Trebuchet MS
 Gui , Timer:Add , Text , vTStart x3 y96 w75 ,
@@ -40,6 +40,7 @@ unix2Human(unixTimestamp)
 
 start:
 	Pause , 0
+	IsPause := False
 	Gui , Submit , NoHide
 
 	Gui , Timer:Color , 1F1F23
@@ -76,9 +77,6 @@ resume:
 	If !IsPause
 	{
 		TimerFinish := human2Unix(A_Now)+TimeLeft
-
-		FormatTime , TimeString , %A_Now% , HH:mm:ss
-		GuiControl , Timer:Text , TStart , %TimeString%
 
 		FormatTime , TimeString , % unix2Human(TimerFinish) , HH:mm:ss
 		GuiControl , Timer:Text , TEnds , %TimeString%
