@@ -1,7 +1,7 @@
 ﻿#NoEnv
 
 Gui , Timer:Show , w165 h114 , Timer
-Gui , Timer:-AlwaysOnTop +SysMenu -MinimizeBox -MaximizeBox
+Gui , Timer:+AlwaysOnTop +SysMenu -MinimizeBox -MaximizeBox
 Gui , Timer:Color , 1F1F23
 
 Gui , Timer:Font , s33 cLime , Digital Dismay
@@ -13,11 +13,11 @@ Gui , Timer:Add , Button , gresume x80 y46 w85 h25 center , P/Resume
 
 Gui , Timer:Font , s11 cBlack , Trebuchet MS
 Gui , Timer:Add , Edit , x0 y71 w55 h25 center ve3
-Gui , Timer:Add , UpDown , x0 y71 w55 h25 -VScroll , 1
+Gui , Timer:Add , UpDown , x0 y71 w55 h25 -VScroll , 0
 Gui , Timer:Add , Edit , x55 y71 w55 h25 center ve2
-Gui , Timer:Add , UpDown , x55 y71 w55 h25 -VScroll , 50
+Gui , Timer:Add , UpDown , x55 y71 w55 h25 -VScroll , 0
 Gui , Timer:Add , Edit , x110 y71 w55 h25 center ve1
-Gui , Timer:Add , UpDown , x110 y71 w55 h25 -VScroll , 0
+Gui , Timer:Add , UpDown , x110 y71 w55 h25 -VScroll , 10
 
 Gui , Timer:Font , s10 cFFFAFA , Trebuchet MS
 Gui , Timer:Add , Text , vTStart x3 y96 w75 ,
@@ -59,8 +59,7 @@ start:
 	sec := Format("{:02}" , floor(mod(TimerExpire, 60)))
 	GuiControl , Timer:Text , dispt , %hur%:%min%:%sec%
 
-	UnixStarted := human2Unix(A_Now)
-	TimerFinish := UnixStarted+TimerExpire
+	TimerFinish := human2Unix(A_Now)+TimerExpire
 
 	FormatTime , TimeString , %A_Now% , HH:mm:ss
 	GuiControl , Timer:Text , TStart , %TimeString%
@@ -78,13 +77,19 @@ resume:
 	{
 		TimerFinish := human2Unix(A_Now)+TimeLeft
 
+		FormatTime , TimeString , %A_Now% , HH:mm:ss
+		GuiControl , Timer:Text , TStart , %TimeString%
+
 		FormatTime , TimeString , % unix2Human(TimerFinish) , HH:mm:ss
 		GuiControl , Timer:Text , TEnds , %TimeString%
 	}
 return
 
 CDTimer:
-	TimeLeft := TimerFinish-human2Unix(A_Now)
+	If !IsPause
+	{
+		TimeLeft := TimerFinish-human2Unix(A_Now)
+	}
 
 	hur := Format("{:02}" , floor(abs(TimeLeft/3600)))
 	min := Format("{:02}" , floor(mod(abs(TimeLeft/60), 60)))
